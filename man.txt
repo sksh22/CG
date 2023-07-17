@@ -1,0 +1,190 @@
+#include <iostream>
+#include <graphics.h>
+#include <math.h>
+using namespace std;
+
+void man(int sx, int sy, int step)
+{
+	// body
+	line(sx, sy, sx, sy + 45);
+	rectangle(sx - 3, sy + 10, sx + 3, sy + 45);
+
+	// head
+	circle(sx, sy - 10, 10);
+
+	// hand left
+	if (step == 1)
+	{
+		line(sx, sy + 10, sx - 15, sy + 30);
+	}
+	else if (step == 2)
+	{
+
+		line(sx, sy + 10, sx + 10, sy + 30);
+	}
+
+	// hand right
+	line(sx, sy + 10, sx + 15, sy + 25);
+
+	// umbrella
+	line(sx + 15, sy + 25, sx + 15, sy - 20);
+	arc(sx + 13, sy + 25, 180, 0, 2);
+	arc(sx + 15, sy - 20, 360, 180, 30);
+	line(sx - 15, sy - 20, sx + 45, sy - 20);
+
+	if (step == 1)
+	{
+
+		// leg left
+		line(sx, sy + 45, sx - 5, sy + 75);
+
+		// leg right
+		line(sx, sy + 45, sx + 10, sy + 75);
+	}
+	else if (step == 2)
+	{
+
+		// leg left
+		line(sx, sy + 45, sx - 10, sy + 75);
+
+		// leg right
+		line(sx, sy + 45, sx + 5, sy + 75);
+	}
+}
+void rain(int x, int y, int intensity)
+{
+	int i, rx, ry;
+	for (i = 0; i < intensity; i++)
+	{
+		rx = rand() % x;
+		ry = rand() % y;
+		if (ry < y - 4 and rx > 2)
+		{
+		line(rx, ry, rx - 1, ry + 4);
+		}
+	}
+}
+
+
+int main()
+{
+	int gdriver = DETECT, gmode;
+	initgraph(&gdriver, &gmode, NULL);
+
+	// man(300,100,2);
+	int ground[4] = {20, 400, 600, 400};
+
+	line(ground[0], ground[1], ground[2], ground[3]); // ground
+	int step = 1;
+	for (int i = ground[0]; i < ground[2]; i += 10)
+	{
+		line(ground[0], ground[1], ground[2], ground[3]); // ground
+
+		man(i, ground[1] - 75, step);
+		if (step == 1)
+		{
+			step = 2;
+		}
+		else
+		{
+			step = 1;
+		}
+		rain(ground[2],ground[3],100);
+		delay(350);
+		cleardevice();
+	}
+
+	// getch();
+	closegraph();
+	return 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//#include <conio.h>
+#include <iostream>
+#include <graphics.h>
+#include <stdlib.h>
+#include <stdio.h>
+using namespace std;
+#define ScreenWidth getmaxx()
+#define ScreenHeight getmaxy()
+#define GroundY ScreenHeight*0.75
+void Rain(int x)
+{
+int i,rx,ry;
+for(i=0;i<400;i++)
+{
+    //generate random value of x and y
+ rx=rand() % ScreenWidth;
+ ry=rand() % ScreenHeight;
+ if(ry<GroundY-4)
+ {
+  if(ry<GroundY-120 || (ry>GroundY-120 && (rx<x-20 || rx>x+60)))
+  line(rx,ry,rx+5,ry+4);
+ }
+}
+}
+int main()
+{
+int gd=DETECT,gm;
+	//initgraph(&gd,&gm,NULL);
+    initwindow(700,600);
+    cleardevice();
+//    line(0,500,getmaxx(),500);
+//    line(0,500,20,450);
+//    line(80,500,60,450);
+//
+//   rectangle(0,330,80,450);
+//
+//    circle(40,300,30);
+    int flag=0,gapflag=0;
+    for(int i=0;i<getmaxx()-50;i=i+10)
+    {
+        cleardevice();
+        line(0,500,getmaxx(),500);      //road
+            Rain(0);
+        rectangle(0+i,330,80+i,450);    //body
+
+        circle(40+i,300,30);            //head
+        if(flag==0)
+        {
+            line(0+i,500,20+i,450);       //leg1
+            line(80+i,500,60+i,450);      //leg2
+            line(40+i,345,120+i,425);         //Left hand
+            flag=1;
+        }
+        else{
+            line(80+i,500,20+i,450);        //leg1
+            line(i,500,60+i,450);           //leg2
+            line(40+i,345,-40+i,425);         //left hand
+            flag=0;
+        }
+        line(80+i,385,120+i,345);        //Right hand
+        line(120+i,345,80+i,240);       //Handle hand
+        line(-40+i,240,200+i,240);      //horizontal line
+        arc(80+i,240,0,180,120);
+
+        delay(1000);
+    }
+    delay(10000);
+//    closegraph();
+   return 0;
+}
